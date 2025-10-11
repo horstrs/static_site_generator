@@ -58,6 +58,13 @@ class TestLeafNode(unittest.TestCase):
             self.fail("Exception expected")
 
 
+    def test_init(self):
+        actual = LeafNode("tag", "value", "props")
+        self.assertEqual(actual.tag, "tag")
+        self.assertEqual(actual.value, "value")
+        self.assertEqual(actual.props, "props")
+
+
     def test_leaf_to_html_p(self):
         node = LeafNode("p", "Hello, world!")
         actual = node.to_html()
@@ -71,6 +78,13 @@ class TestLeafNode(unittest.TestCase):
 
 
 class TestParentNode(unittest.TestCase):
+    def test_init(self):
+        actual = ParentNode("tag", ["children"], "props")
+        self.assertEqual(actual.tag, "tag")
+        self.assertEqual(actual.children, ["children"])
+        self.assertEqual(actual.props, "props")
+
+
     def test_to_html_with_children(self):
         child_node = LeafNode("span", "child")
         parent_node = ParentNode("div", [child_node])
@@ -116,6 +130,7 @@ class TestParentNode(unittest.TestCase):
             node.to_html(),
             "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>",
         )
+
 
 if __name__ == "__main__":
     unittest.main()
