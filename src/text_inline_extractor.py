@@ -1,3 +1,4 @@
+import re
 from text_node import TextNode, TextType
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -21,16 +22,16 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     return new_node_list
     
 
-def get_delimited_words(text_node, delimiter):
-    delimiter_count = text_node.count(delimiter)
+def get_delimited_words(text, delimiter):
+    delimiter_count = text.count(delimiter)
     if delimiter_count % 2 != 0:
-        raise ValueError(f"Invalid Node Text: delimiter {delimiter} not closed. \nString passed: {text_node.text}")
+        raise ValueError(f"Invalid Node Text: delimiter {delimiter} not closed. \nString passed: {text}")
 
     indexes_list = []
     last_index = -1
     start_index = None
     for i in range(delimiter_count):
-        last_index = text_node.index(delimiter, last_index+1)
+        last_index = text.index(delimiter, last_index+1)
         if start_index is None:
             start_index = last_index + len(delimiter)
         else:
@@ -39,6 +40,14 @@ def get_delimited_words(text_node, delimiter):
     
     delimited_words = [] 
     for indexes in indexes_list:
-        delimited_words.append(text_node[indexes[0]:indexes[1]])
+        delimited_words.append(text[indexes[0]:indexes[1]])
    
     return delimited_words
+
+
+def extract_markdown_images(text):
+    return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+
+
+def extract_markdown_links(text):
+    return re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)

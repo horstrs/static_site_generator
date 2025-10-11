@@ -1,7 +1,7 @@
 import unittest
 
 from text_node import TextNode, TextType
-from text_node_inline_extractor import split_nodes_delimiter
+from text_inline_extractor import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 class Test_Text_Node_Converter(unittest.TestCase):
 
@@ -63,12 +63,40 @@ class Test_Text_Node_Converter(unittest.TestCase):
         self.assertListEqual(actual, expected)
 
 
-    def nested_inline_to_node_text(self):
-        
+    def test_nested_inline_to_node_text(self):
+        node = TextNode("This is text `with two `code block` word", TextType.TEXT)
         with self.assertRaises(ValueError):
-            node = TextNode("This is text `with two `code block` word", TextType.TEXT)
             split_nodes_delimiter([node], "`", TextType.CODE)
             self.fail("Exception expected for nested inlines")
+
+
+    def test_extract_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        actual = extract_markdown_images(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
+        self.assertListEqual(actual, expected)
+
+
+    def test_extract_markdown_images_plain_text(self):
+        text = "This is text with a plain text"
+        actual = extract_markdown_images(text)
+        expected = []
+        self.assertListEqual(actual, expected)
+
+
+    def test_extract_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        actual = extract_markdown_links(text)
+        expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+        self.assertListEqual(actual, expected)
+       
+        
+    def test_extract_markdown_links_plain_text(self):
+        text = "This is text with a plain text"
+        actual = extract_markdown_links(text)
+        expected = []
+        self.assertListEqual(actual, expected)
+
 
 """
     def test_link_text_to_node_text(self):
