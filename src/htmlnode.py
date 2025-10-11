@@ -2,6 +2,8 @@ class HTMLNode():
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
+        if children and type(children) is not list:
+            raise TypeError
         self.children = children
         self.props = props
 
@@ -25,13 +27,30 @@ class HTMLNode():
 
 class LeafNode(HTMLNode):
     def __init__(self, value, tag, props=None):
-        super().__init__(value, tag, props)
+        super().__init__(value, tag, None, props)
     
 
     def to_html(self):
         if not self.value:
-            raise ValueError("Invalid HTML: Leaf nodes must have a value!")
+            raise ValueError("Invalid HTML: leaf nodes must have a value!")
         if not self.tag or self.tag == "":
             return str(self.value)
 
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+    
+    
+    def to_html(self):
+        if not self.tag:
+            raise ValueError("Invalid HTML: tag missing in parent node")
+        if not self.children:
+            raise ValueError("Invalid HTML: children missing in parent node")
+        html_string = f"<{self.tag}{self.props_to_html()}>"
+        for node in self.children:
+            html_string += node.to_html()
+        html_string += f"</{self.tag}>"
+        return html_string
