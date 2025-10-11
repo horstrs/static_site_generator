@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from text_node import TextNode, TextType
 
 class TestTextNode(unittest.TestCase):
     def test_eq_two_eq(self):
@@ -69,8 +69,7 @@ class TestTextNode(unittest.TestCase):
         html_node = text_node.text_node_to_html_node()
         self.assertEqual(html_node.tag, "a")
         self.assertEqual(html_node.value, "This is a link text node")
-        self.assertEqual(html_node.props, {"href": "www.google.com",
-                                           "target": "_blank"})
+        self.assertEqual(html_node.props, {"href": "www.google.com"})
 
 
     def test_image_text_to_html_node(self):

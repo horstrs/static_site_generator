@@ -1,5 +1,5 @@
 from enum import Enum
-from htmlnode import LeafNode
+from html_node import LeafNode
 
 class TextType(Enum):
     TEXT = "text"
@@ -40,8 +40,7 @@ class TextNode():
             case TextType.LINK:
                 if not self.url:
                     raise ValueError("Invalid TEXT: link type must contain an URL")
-                return LeafNode(tag="a", value=self.text, props={"href": self.url,
-                                                                 "target": "_blank"})
+                return LeafNode(tag="a", value=self.text, props={"href": self.url})
             case TextType.IMAGE:
                 if not self.url:
                     raise ValueError("Invalid TEXT: image type must contain an URL")
