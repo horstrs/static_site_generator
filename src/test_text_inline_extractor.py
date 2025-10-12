@@ -1,7 +1,7 @@
 import unittest
 
 from text_node import TextNode, TextType
-from text_inline_extractor import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
+from text_inline_extractor import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
 
 class Test_Text_Node_Converter(unittest.TestCase):
 
@@ -98,6 +98,36 @@ class Test_Text_Node_Converter(unittest.TestCase):
         self.assertListEqual(actual, expected)
 
 
+    def test_split_images(self):
+        node = TextNode(
+            "![image1](https://i.imgur.com/zjjcJKZ.png)This is text with an ![image2](https://i.imgur.com/zjjcJKZ.png) and another ![image3](https://i.imgur.com/3elNhQu.png)",
+            TextType.TEXT,
+        )
+        actual = split_nodes_image([node])
+        expected = [
+                TextNode("image1", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image2", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode("image3", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"),
+            ]
+        self.assertListEqual(actual, expected)
+
+
+    def test_split_links(self):
+        node = TextNode(
+            "This is text with a [link](https://i.imgur.com/zjjcJKZ.png) and another [link](https://i.imgur.com/3elNhQu.png)",
+            TextType.TEXT,
+        )
+        actual = split_nodes_link([node])
+        expected = [
+                TextNode("This is text with a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://i.imgur.com/3elNhQu.png"),
+            ]
+        self.assertListEqual(actual, expected)
+
 """
     def test_link_text_to_node_text(self):
         node = TextNode("This is a text with bold inline text", TextType.TEXT)
@@ -110,4 +140,5 @@ class Test_Text_Node_Converter(unittest.TestCase):
         node = TextNode("This is a text with **bold** inline text", TextType.TEXT)
         actual = split_nodes_delimiter([node], "`", TextType.CODE)
         expected = [node]
+
         self.assertListEqual(actual, expected)"""
