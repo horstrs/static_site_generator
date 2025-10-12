@@ -127,18 +127,3 @@ class Test_Text_Node_Converter(unittest.TestCase):
                 TextNode("link", TextType.LINK, "https://i.imgur.com/3elNhQu.png"),
             ]
         self.assertListEqual(actual, expected)
-
-"""
-    def test_link_text_to_node_text(self):
-        node = TextNode("This is a text with bold inline text", TextType.TEXT)
-        actual = split_nodes_delimiter([node], "`", TextType.LINK)
-        expected = [node]
-        self.assertListEqual(actual, expected)
-
-
-    def test_images_text_to_node_text(self):
-        node = TextNode("This is a text with **bold** inline text", TextType.TEXT)
-        actual = split_nodes_delimiter([node], "`", TextType.CODE)
-        expected = [node]
-
-        self.assertListEqual(actual, expected)"""
