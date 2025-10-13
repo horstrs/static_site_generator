@@ -3,7 +3,7 @@ import unittest
 from text_node import TextNode, TextType
 from text_inline_extractor import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_text_nodes
 
-class Test_Text_Node_Converter(unittest.TestCase):
+class TestTextInlineExtractor(unittest.TestCase):
 
     def test_run(self):
         node = TextNode("This is a **long** text `with two` `code blocks` and _multiple_ delimiters", TextType.TEXT)
