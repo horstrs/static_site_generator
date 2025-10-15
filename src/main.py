@@ -7,9 +7,9 @@ from markdown_to_html_node import markdown_to_html_node, extract_title
 
 def main():
 
-    basepath = sys.argv[1]
-    if basepath == "":
-        basepath = "/"
+    basepath = "/"
+    if len(sys.argv) >= 2:
+        basepath = sys.argv[1]
     try:
         recreate_source_in_destination("./static", "./docs")
         generate_pages_recursive("./content", "./template.html", "./docs", basepath)
