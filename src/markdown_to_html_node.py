@@ -108,3 +108,18 @@ def clean_up_text_block(text):
 
 def clean_up_code_block(text):
     return text[3:-3]
+
+
+def extract_title(md_block):
+    lines = md_block.split("\n")
+    line_to_read = 0
+    while True:
+        line = lines[line_to_read]
+        if not line:
+            line_to_read += 1
+        else:
+            if line[:2] != "# ":
+                raise ValueError(f"First non-empty line expected to be a title. Line{line}")
+            else:
+                return line[2:]
+        

@@ -44,7 +44,7 @@ class TextNode():
             case TextType.IMAGE:
                 if not self.url:
                     raise ValueError("Invalid TEXT: image type must contain an URL")
-                return LeafNode(tag="img", value=None, props={"src": self.url,
+                return LeafNode(tag="img", value="", props={"src": self.url,
                                                               "alt": self.text})
             case _:
                 raise ValueError("Invalid TEXT: text type not recognized")

@@ -31,8 +31,8 @@ class LeafNode(HTMLNode):
     
 
     def to_html(self):
-        if not self.value:
-            raise ValueError("Invalid HTML: leaf nodes must have a value!")
+        if self.value is None:
+            raise ValueError(f"Invalid HTML: leaf nodes must have a value! Node: {self}")
         if not self.tag or self.tag == "":
             return str(self.value)
 
@@ -45,10 +45,10 @@ class ParentNode(HTMLNode):
     
     
     def to_html(self):
-        if not self.tag:
-            raise ValueError("Invalid HTML: tag missing in parent node")
-        if not self.children:
-            raise ValueError("Invalid HTML: children missing in parent node")
+        if self.tag is None:
+            raise ValueError(f"Invalid HTML: tag missing in parent node. Node: {self}")
+        if self.children is None:
+            raise ValueError(f"Invalid HTML: children missing in parent node. Node: {self}")
         html_string = f"<{self.tag}{self.props_to_html()}>"
         for node in self.children:
             html_string += node.to_html()
