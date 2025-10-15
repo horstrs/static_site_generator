@@ -6,9 +6,13 @@ from markdown_to_html_node import markdown_to_html_node, extract_title
 
 
 def main():
+
+    basepath = sys.argv[1]
+    if basepath == "":
+        basepath = "/"
     try:
-        recreate_source_in_destination("./static", "./public")
-        generate_pages_recursive("./content", "./template.html", "./public")
+        recreate_source_in_destination("./static", "./docs")
+        generate_pages_recursive("./content", "./template.html", "./docs", basepath)
     except ValueError as e:
         sys.exit(f"Execution aborted. Error: {e}")
     pass
@@ -50,7 +54,7 @@ def copy_source_to_destination(source, destination):
             copy_source_to_destination(item_path, destination_path)
 
 
-def generate_pages_recursive(source_dir_path, template_path, dest_dir_path):
+def generate_pages_recursive(source_dir_path, template_path, dest_dir_path, basepath):
     if not os.path.exists(source_dir_path):
         raise ValueError(f"source path '{source_dir_path}' not found")
 
@@ -60,13 +64,13 @@ def generate_pages_recursive(source_dir_path, template_path, dest_dir_path):
         dest_path = os.path.join(dest_dir_path, item)
         if os.path.isfile(source_path):
             dest_file = str.replace(dest_path, ".md", ".html")
-            generate_page(source_path, template_path, dest_file)
+            generate_page(source_path, template_path, dest_file, basepath)
         else:
             prepare_destination(dest_path)
-            generate_pages_recursive(source_path, template_path, dest_path)
+            generate_pages_recursive(source_path, template_path, dest_path, basepath)
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(
         f"Generating page from '{from_path}' to '{dest_path}' using '{template_path}'"
     )
@@ -88,6 +92,10 @@ def generate_page(from_path, template_path, dest_path):
 
     final_doc = str.replace(template_contents, "{{ Title }}", doc_title)
     final_doc = str.replace(final_doc, "{{ Content }}", document_text)
+    final_doc = str.replace(final_doc, 'href="/', f'href="{basepath}')
+    final_doc = str.replace(final_doc, "href='/", f"href='{basepath}")
+    final_doc = str.replace(final_doc, 'src="/', f'src="{basepath}')
+    final_doc = str.replace(final_doc, "src='/", f"src='{basepath}")
 
     with open(dest_path, "w") as page:
         page.write(final_doc)
