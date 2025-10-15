@@ -1,8 +1,5 @@
 from blocks_markdown import BlockType, markdown_to_blocks, block_to_blocktype
 from text_inline_extractor import (
-    split_nodes_delimiter,
-    split_nodes_image,
-    split_nodes_link,
     text_to_text_nodes,
 )
 from text_node import TextNode, TextType
