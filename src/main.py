@@ -45,5 +45,10 @@ def copy_source_to_destination(source, destination):
                 os.mkdir(destination_path)
             copy_source_to_destination(item_path, destination_path)
 
+
+def extract_title(markdown):
+    pass
+
+
 if __name__ == "__main__":
     main()

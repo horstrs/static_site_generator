@@ -34,8 +34,7 @@ def block_to_html_node(md_block):
         case BlockType.ORDERED_LIST:
             return ordered_list_to_html_node(md_block)
         case _:
-            pass
-            # HTML_children.append(text_to_children(md_block))
+            raise ValueError(f"block type '{block_type}' not supported")
 
 
 def paragraph_to_html_node(md_block):
